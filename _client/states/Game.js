@@ -11,13 +11,12 @@ class Game extends Phaser.State {
         this.tealTeamMap = {}
         this.orangeTeamMap = {}
         this.score = {
-            teal: 0,
-            orange: 0
+            teal: 0, // this.initTeal || 0,
+            orange: 0 // this.initOrange || 0
         }
         this.foodMap = {}
         this.foodId = 0
         this.foodCount = 0
-        this.initialFoodParams = [222,100,388,342,931,222,222,777,290,999,666,444,388,342,931,222,222,777,290,999]
     }
 
     preload() {
@@ -27,6 +26,7 @@ class Game extends Phaser.State {
         this.game.load.image('orangeSprite','assets/sprites/orange-player.png')
         this.game.load.image('tealSprite','assets/sprites/teal-player.png')
         this.game.load.image('pizza','assets/sprites/logo.png')
+
         this.game.load.image('donut', 'assets/sprites/donut.png')
         this.game.load.image('avocado', 'assets/sprites/avocado.png')
         this.game.load.image('banana', 'assets/sprites/banana.png')
@@ -43,17 +43,16 @@ class Game extends Phaser.State {
     }
 
     create() {
+    
+    //   this.initTeal = this.score.teal || 0
+    //   this.initOrange = this.score.orange || 0
+
       Phaser.ScaleManager.prototype.setScreenSize = Phaser.ScaleManager.prototype.updateLayout;
 
       this.game.scale.pageAlignHorizontally = true;
       this.game.scale.pageAlignVertically = true;
       this.game.scale.setScreenSize(true);
 
-        let logo = this.game.add.sprite(0, 200, 'assets/sprites/logo.png');
-        logo.fixedToCamera = true;
-
-        let camX = 0;
-        let camY = 0;
 
         var map = this.game.add.tilemap('map',64,64)
         map.addTilesetImage('tileset')
@@ -65,22 +64,23 @@ class Game extends Phaser.State {
         layer.inputEnabled = true
 
 
-        //making food in game:
-         let j = 0
-         for (var i = 0; i < 40; i++){
-           let rand = Math.floor(Math.random() * foodArr.length);
-           let randFood = foodArr[rand];
-                let newFood = this.game.add.sprite(this.initialFoodParams[j], this.initialFoodParams[j+1], randFood)
+
+            for (var i = 0; i <= 40; i++){
+                console.log('making more food')
+                let rand = Math.floor(Math.random() * foodArr.length);
+                let randFood = foodArr[rand];
+                let x = Math.floor(Math.random() * 2000);
+                let y = Math.floor(Math.random() * 2000);
+                let newFood = this.game.add.sprite(x, y, randFood)
+
                 newFood.anchor.setTo(0.5, 0.5);
-                this.foodMap[this.foodId] = newFood
-                this.foodId++;
-                this.foodCount++;
-                j+= 2
+                this.foodMap[this.foodId] = newFood;
+                this.foodId++
+                this.foodCount++
             }
 
         //STEP ONE:
         this.client.askNewPlayer()
-        console.log(this.playerMap)
         layer.events.onInputUp.add(this.getCoordinates, this)
 
         let leaderboard = this.game.add.text(this.world.centerX, this.world.centerY -490, "Leaderboard")
@@ -167,6 +167,7 @@ class Game extends Phaser.State {
                 this.foodCount++
             }
         }
+
     }
 
 
@@ -179,11 +180,11 @@ class Game extends Phaser.State {
             let foodLocation = this.foodMap[food].worldPosition
 
             if(playerLocation.x > foodLocation.x - 12 && playerLocation.x < foodLocation.x + 12){
-                this.playerMap[id].width += 3;
-                this.playerMap[id].height += 3;
+                this.playerMap[id].width += 2;
+                this.playerMap[id].height += 2;
                 this.removeFood(food)
                 this.foodCount--;
-                this.playerMap[id].playerPoints += 1
+                this.playerMap[id].playerPoints++;
                 this.growPlayer(id, this.playerMap[id].width, this.playerMap[id].height, this.playerMap[id].x, this.playerMap[id].y)
             }
 
@@ -200,7 +201,7 @@ class Game extends Phaser.State {
                 let enemyLocation = this.playerMap[enemy].worldPosition
 
                 // changed this: (Math.abs(this.playerMap[enemy].width - this.playerMap[id].width) < 15) might be too much?
-                if((Math.abs(playerLocation.x - enemyLocation.x ) < 8) && (this.playerMap[id].width - this.playerMap[enemy].width >= 10 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
+                if((Math.abs(playerLocation.x - enemyLocation.x ) < 5) && (this.playerMap[id].width - this.playerMap[enemy].width >= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
                     console.log('enemy was sucessfully attacked.')
                     this.playerMap[id].playerPoints += Math.floor(this.playerMap[enemy].width/2);
                     console.log(this.playerMap[enemy])
@@ -218,9 +219,10 @@ class Game extends Phaser.State {
                     gameOverText.fill = 'purple'
                     gameOverText.anchor.setTo(0.5)
                     function set(){return gameOverText.setText("")}
-                    setTimeout(set, 3000)
-             } else if((Math.abs(playerLocation.x - enemyLocation.x ) < 8) && (this.playerMap[enemy].width - this.playerMap[id].width) <= 10 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
-                    console.log('you are being attacked!')
+
+                    setTimeout(set, 4000)
+             } else if((Math.abs(playerLocation.x - enemyLocation.x ) < 5) && (this.playerMap[enemy].width - this.playerMap[id].width) <= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
+                        console.log('you are being attacked!')
                         this.playerMap[id].destroy();
                         delete this.playerMap[id];
                         ///GAME OVER!!!///
@@ -238,13 +240,25 @@ class Game extends Phaser.State {
         console.log(this.playerMap[id].teamName, 'scored a point!')
 
         if(this.playerMap[id].teamName === 'orange'){
+            this.score.orange = 0
+            Object.keys(this.playerMap).forEach(o => { 
+                if (this.playerMap[o].teamName === 'orange'){
+                    this.score.orange += this.playerMap[o].playerPoints
+                }
+            })
+      
             this.score.orange += Math.floor(this.playerMap[id].playerPoints)
         }
         else if(this.playerMap[id].teamName === 'teal'){
+            this.score.teal = 0;
+            Object.keys(this.playerMap).forEach(t => {
+                if (this.playerMap[t].teamName === 'teal'){
+                    this.score.teal += this.playerMap[t].playerPoints
+                }
+            })
             this.score.teal += Math.floor(this.playerMap[id].playerPoints)
         }
 
-        console.log(this.score)
 
         //reset player's points:
         this.playerMap[id].playerPoints = 0;
@@ -292,7 +306,6 @@ class Game extends Phaser.State {
     resize (id) {
         this.gameMap[id].destroy();
         delete this.gameMap[id];
-        console.log('she got deleted')
     }
 
     removeFood = function(id){
