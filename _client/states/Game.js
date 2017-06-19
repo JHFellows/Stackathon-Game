@@ -22,7 +22,7 @@ class Game extends Phaser.State {
     preload() {
         this.game.stage.disableVisibilityChange = true
         this.game.load.tilemap('map', 'assets/map/backgroundMap.csv')
-        this.game.load.image('tileset', 'assets/map/purps.png')
+        this.game.load.image('tileset', 'assets/map/purps2.png')
         this.game.load.image('orangeSprite','assets/sprites/orange-player.png')
         this.game.load.image('tealSprite','assets/sprites/teal-player.png')
         this.game.load.image('pizza','assets/sprites/logo.png')
@@ -64,19 +64,19 @@ class Game extends Phaser.State {
         layer.inputEnabled = true
 
 
-
-            for (var i = 0; i <= 40; i++){
-                console.log('making more food')
-                let rand = Math.floor(Math.random() * foodArr.length);
-                let randFood = foodArr[rand];
-                let x = Math.floor(Math.random() * 2000);
-                let y = Math.floor(Math.random() * 2000);
+        //making food in game:
+         let j = 0
+         for (var i = 0; i < 40; i++){
+           let rand = Math.floor(Math.random() * foodArr.length);
+           let x = Math.floor(Math.random() * 2000);
+           let y = Math.floor(Math.random() * 2000);
+           let randFood = foodArr[rand];
                 let newFood = this.game.add.sprite(x, y, randFood)
-
                 newFood.anchor.setTo(0.5, 0.5);
-                this.foodMap[this.foodId] = newFood;
-                this.foodId++
-                this.foodCount++
+                this.foodMap[this.foodId] = newFood
+                this.foodId++;
+                this.foodCount++;
+
             }
 
         //STEP ONE:
@@ -178,6 +178,7 @@ class Game extends Phaser.State {
 
         Object.keys(this.foodMap).forEach(food => {
             let foodLocation = this.foodMap[food].worldPosition
+
 
             if(playerLocation.x > foodLocation.x - 12 && playerLocation.x < foodLocation.x + 12){
                 this.playerMap[id].width += 2;
