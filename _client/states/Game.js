@@ -184,7 +184,7 @@ class Game extends Phaser.State {
                 this.playerMap[id].height += 2;
                 this.removeFood(food)
                 this.foodCount--;
-                this.playerMap[id].playerPoints++;
+                this.playerMap[id].playerPoints+=1;
                 this.growPlayer(id, this.playerMap[id].width, this.playerMap[id].height, this.playerMap[id].x, this.playerMap[id].y)
             }
 
@@ -201,7 +201,7 @@ class Game extends Phaser.State {
                 let enemyLocation = this.playerMap[enemy].worldPosition
 
                 // changed this: (Math.abs(this.playerMap[enemy].width - this.playerMap[id].width) < 15) might be too much?
-                if((Math.abs(playerLocation.x - enemyLocation.x ) < 5) && (this.playerMap[id].width - this.playerMap[enemy].width >= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
+                if((Math.abs(playerLocation.y - enemyLocation.y ) < 8) && (Math.abs(playerLocation.x - enemyLocation.x ) < 8) && (this.playerMap[id].width - this.playerMap[enemy].width >= 40 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
                     console.log('enemy was sucessfully attacked.')
                     this.playerMap[id].playerPoints += Math.floor(this.playerMap[enemy].width/2);
                     console.log(this.playerMap[enemy])
@@ -211,18 +211,15 @@ class Game extends Phaser.State {
                     }else{
                       team = "Teal Team ";
                     }
+                    this.timeOutText(team)
                     this.removePlayer(enemy)
-                    let gameOverText = this.game.add.text(this.world.centerX, this.world.centerY - 300, team + "lost a player!");
-                    gameOverText.fixedToCamera= true;
-                    gameOverText.font = 'Audiowide'
-                    gameOverText.fontSize = 45
-                    gameOverText.fill = 'purple'
-                    gameOverText.anchor.setTo(0.5)
-                    function set(){return gameOverText.setText("")}
 
-                    setTimeout(set, 4000)
-             } else if((Math.abs(playerLocation.x - enemyLocation.x ) < 5) && (this.playerMap[enemy].width - this.playerMap[id].width) <= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
+             } else if((Math.abs(playerLocation.y - enemyLocation.y ) < 8) && (Math.abs(playerLocation.x - enemyLocation.x ) < 8) && (this.playerMap[enemy].width - this.playerMap[id].width) >= 40 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
                         console.log('you are being attacked!')
+                        console.log('y location:', playerLocation.y - enemyLocation.y)
+                        console.log('x location:', playerLocation.y - enemyLocation.y)
+                        console.log('enemy size:', this.playerMap[enemy].width)
+                        console.log('my size:', this.playerMap[id].width)
                         this.playerMap[id].destroy();
                         delete this.playerMap[id];
                         ///GAME OVER!!!///
@@ -236,29 +233,27 @@ class Game extends Phaser.State {
 
     }
 
+    timeOutText(team){
+                    let gameOverText = this.game.add.text(this.world.centerX, this.world.centerY - 300, team + "lost a player!");
+                    gameOverText.fixedToCamera= true;
+                    gameOverText.font = 'Audiowide'
+                    gameOverText.fontSize = 45
+                    gameOverText.fill = 'purple'
+                    gameOverText.anchor.setTo(0.5)
+                    function set(){return gameOverText.setText("")}
+                    setTimeout(set, 4000)
+    }
+
     updateScore(id){
         console.log(this.playerMap[id].teamName, 'scored a point!')
 
         if(this.playerMap[id].teamName === 'orange'){
-            this.score.orange = 0
-            Object.keys(this.playerMap).forEach(o => { 
-                if (this.playerMap[o].teamName === 'orange'){
-                    this.score.orange += this.playerMap[o].playerPoints
-                }
-            })
-      
             this.score.orange += Math.floor(this.playerMap[id].playerPoints)
         }
+
         else if(this.playerMap[id].teamName === 'teal'){
-            this.score.teal = 0;
-            Object.keys(this.playerMap).forEach(t => {
-                if (this.playerMap[t].teamName === 'teal'){
-                    this.score.teal += this.playerMap[t].playerPoints
-                }
-            })
             this.score.teal += Math.floor(this.playerMap[id].playerPoints)
         }
-
 
         //reset player's points:
         this.playerMap[id].playerPoints = 0;
