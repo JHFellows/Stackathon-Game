@@ -174,7 +174,7 @@ class Game extends Phaser.State {
         Object.keys(this.foodMap).forEach(food => {
             let foodLocation = this.foodMap[food].worldPosition
 
-            if(playerLocation.x > foodLocation.x - 5 && playerLocation.x < foodLocation.x + 12){
+            if(playerLocation.x > foodLocation.x - 10 && playerLocation.x < foodLocation.x + 10){
                 this.playerMap[id].width += 1;
                 this.playerMap[id].height += 1;
                 this.removeFood(food)
@@ -196,7 +196,7 @@ class Game extends Phaser.State {
                 let enemyLocation = this.playerMap[enemy].worldPosition
 
                 // changed this: (Math.abs(this.playerMap[enemy].width - this.playerMap[id].width) < 15) might be too much?
-                if((Math.abs(playerLocation.x - enemyLocation.x ) < 5) && (this.playerMap[id].width - this.playerMap[enemy].width >= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
+                if((Math.abs(playerLocation.x - enemyLocation.x ) < 7) && (this.playerMap[id].width - this.playerMap[enemy].width >= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
                     console.log('enemy was sucessfully attacked.')
                     this.playerMap[id].playerPoints += Math.floor(this.playerMap[enemy].width/2);
                     console.log(this.playerMap[enemy])
@@ -215,7 +215,7 @@ class Game extends Phaser.State {
                     gameOverText.anchor.setTo(0.5)
                     function set(){return gameOverText.setText("")}
                     setTimeout(set, 3000)
-             } else if((Math.abs(playerLocation.x - enemyLocation.x ) < 5) && (this.playerMap[enemy].width - this.playerMap[id].width) <= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
+             } else if((Math.abs(playerLocation.x - enemyLocation.x ) < 7) && (this.playerMap[enemy].width - this.playerMap[id].width) <= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
                     console.log('you are being attacked!')
                         this.playerMap[id].destroy();
                         delete this.playerMap[id];
