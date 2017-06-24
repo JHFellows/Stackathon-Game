@@ -201,7 +201,7 @@ class Game extends Phaser.State {
                 let enemyLocation = this.playerMap[enemy].worldPosition
 
                 // changed this: (Math.abs(this.playerMap[enemy].width - this.playerMap[id].width) < 15) might be too much?
-                if((Math.abs(playerLocation.y - enemyLocation.y ) < 8) && (Math.abs(playerLocation.x - enemyLocation.x ) < 8) && (this.playerMap[id].width - this.playerMap[enemy].width >= 40 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
+                if((Math.abs(playerLocation.y - enemyLocation.y ) < 8) && (Math.abs(playerLocation.x - enemyLocation.x ) < 8) && (this.playerMap[id].width - this.playerMap[enemy].width >= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName)){
                     console.log('enemy was sucessfully attacked.')
                     this.playerMap[id].playerPoints += Math.floor(this.playerMap[enemy].width/2);
                     console.log(this.playerMap[enemy])
@@ -214,7 +214,7 @@ class Game extends Phaser.State {
                     this.timeOutText(team)
                     this.removePlayer(enemy)
 
-             } else if((Math.abs(playerLocation.y - enemyLocation.y ) < 8) && (Math.abs(playerLocation.x - enemyLocation.x ) < 8) && this.playerMap[enemy].width > this.playerMap[id].width && (this.playerMap[enemy].width - this.playerMap[id].width) <= 40 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
+             } else if((Math.abs(playerLocation.y - enemyLocation.y ) < 8) && (Math.abs(playerLocation.x - enemyLocation.x ) < 8) && this.playerMap[enemy].width > this.playerMap[id].width && (this.playerMap[enemy].width - this.playerMap[id].width) <= 30 && this.playerMap[enemy].teamName !== this.playerMap[id].teamName){
                         console.log('you are being attacked!')
                         console.log('y location:', playerLocation.y - enemyLocation.y)
                         console.log('x location:', playerLocation.y - enemyLocation.y)
