@@ -2,7 +2,7 @@
 
 Agroup.io is Agar.io, for groups!
 
-![alt text](https://raw.githubusercontent.com/JHFellows/Stackathon-Game/agifio.gif)
+![alt text](https://raw.githubusercontent.com/JHFellows/Stackathon-Game/master/agifio.gif)
 
 This repo was built off [basic-mmo-phaser] (https://github.com/TVScoundrel/mmo-phaser-es6.git)
 
