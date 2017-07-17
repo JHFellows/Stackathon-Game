@@ -1,18 +1,18 @@
-# mmo-phaser-es6
+# Agroup.io
 
-This Repository is based off a different project: [basic-mmo-phaser](https://github.com/Jerenaux/basic-mmo-phaser) with thanks to [Jerome Renaux](https://github.com/Jerenaux).
+Agroup.io is Agar.io, for groups!
 
-This project here is a succesful attempt at refactoring before mentioned repository into ES2015.
+![alt text](https://raw.githubusercontent.com/JHFellows/Stackathon-Game/agifio.gif)
 
-## Download this repository and get all dependencies
+This repo was built off [basic-mmo-phaser] (https://github.com/TVScoundrel/mmo-phaser-es6.git)
+
+## How to Play
 ```
-git clone https://github.com/TVScoundrel/mmo-phaser-es6.git
-cd mmo-phaser-es6
+git clone https://github.com/JHFellows/Stackathon-Game
+cd Stackathon-Game
 npm install
 ```
-
-## Starting your server
-This skeleton uses webpack to turn your beautiful ES2015 code into something your browser understands, so before starting the server you should pack the code that is there by opening a terminal and typing:
+Build the project by typing:
 
 ```
 npm run dev
@@ -24,4 +24,4 @@ Now you can start the server by typing:
 npm start
 ```
 
-This will serve your project at [localhost:8081](http://localhost:8081)
+This will serve your project at [localhost:8081](http://localhost:8081). Want to play with your friends? Make sure they are on the same wifi and tell them to go to [youripaddress:8081]! They do not need to download the project
